@@ -116,24 +116,3 @@ class postgres():
 
         cur.close()
         return timediff, k_NN
-
-#Common Functions
-def generateRandomID_List(totalNumbers,maxID):
-    # totalNumbers: how many random IDs are going to be generated?
-    # maxID: max ID
-
-    random_list = list()
-
-    count = 0
-
-    while(count < totalNumbers):
-        id = random.randint(1, maxID)
-        # Check whether the ID is indeed valid:
-        # We have not included the Postgres IDs: [8M1 - 10M]
-        if(id >= 8000001 and id <= 10000000):
-            continue
-        else:
-            random_list.append(id)
-            count += 1
-
-    return random_list
