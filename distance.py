@@ -58,16 +58,6 @@ class distance():
         distance=b*A*(sigma-delta_sig)
         return distance
 
-    
-
-#Example 1 (Ankara)
-print("Example 1")
-d=distance(39.967648,32.727430,39.914476,32.879110)
-result=d.Haversine()
-v=d.Vincenty()
-print (result)
-print (v)
-
 
 
 
