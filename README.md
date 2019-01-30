@@ -7,4 +7,4 @@ In this project, it is aimed to apply k-NN query in two different databases, Pos
 Also a sample data set has uploaded as GeoJSON file. This data set can be import to MongoDB directly and can be run through the 
 Python class.
 
-The implementation of this project and the results are submitted to the <b> "International Workshop on Collaborative Crowdsourced Cloud Mapping and Geospatial Big Data" <\b>
+The implementation of this project and the results are submitted to the <b> "International Workshop on Collaborative Crowdsourced Cloud Mapping and Geospatial Big Data" </b>
