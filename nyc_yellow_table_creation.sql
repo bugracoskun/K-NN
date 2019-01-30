@@ -1,6 +1,6 @@
 ﻿-- Assume that all attributes are text based
 -- This is for TEST
-CREATE TABLE yellow_text(
+CREATE TABLE trips_text(
                 id serial NOT NULL,
                 vendorid text,
                 t_pickup text,
@@ -25,8 +25,8 @@ CREATE TABLE yellow_text(
 
 
 
--- Optimal trip table design
-CREATE TABLE yellow(
+-- Optimal trip table design - staging table
+CREATE TABLE trips_staging(
                 id serial NOT NULL,
                 vendorid character varying(1),
                 t_pickup timestamp without time zone,
@@ -51,8 +51,8 @@ CREATE TABLE yellow(
 
 
 
--- Create the pickup and dropoff geometry column
-CREATE TABLE yellow_geom(
+-- Create the pickup and dropoff geometry column - production table
+CREATE TABLE trips(
                 id serial NOT NULL,
                 vendorid character varying(1),
                 t_pickup timestamp without time zone,
@@ -80,7 +80,7 @@ CREATE TABLE yellow_geom(
 
 
 -- Insert into the new taxi table and generate the geometry
-insert into yellow_geom(id, vendorid, t_pickup, t_dropoff, num_passengers, 
+insert into trips(id, vendorid, t_pickup, t_dropoff, num_passengers, 
 		        trip_distance, l_pickup_lon, l_pickup_lat, ratecodeid, flag_store, 
 		        l_dropoff_lon, l_dropoff_lat, payment_type, fare_amount, extra, mta_tax, 
 		        surcharge, tip, tolls, total, 
@@ -93,14 +93,14 @@ insert into yellow_geom(id, vendorid, t_pickup, t_dropoff, num_passengers,
 		        ST_SetSRID(ST_Point(l_pickup_lon,l_pickup_lat),4326),
 		        ST_SetSRID(ST_Point(l_dropoff_lon,l_dropoff_lat),4326)
 	      
-	from yellow
+	from trips_staging
 
 
 
 -- Sample k-NN
 SELECT id
-FROM yellow_geom
-ORDER BY l_pickup <-> (select l_pickup from yellow_geom where id = 11000000)
+FROM trips
+ORDER BY l_pickup <-> (select l_pickup from trips where id = 11000000)
 limit 10
 
 
