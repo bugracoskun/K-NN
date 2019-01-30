@@ -8,3 +8,4 @@ Also a sample data set has uploaded as GeoJSON file. This data set can be import
 Python class.
 
 The implementation of this project and the results are submitted to the <b><a href="https://www.gsw2019.org/c3mgbd-13-14-june/"> "International Workshop on Collaborative Crowdsourced Cloud Mapping and Geospatial Big Data"</a> </b>
+
