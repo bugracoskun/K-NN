@@ -1,6 +1,7 @@
 # K-NN
 
 Investigating the k-NN performance in Postgres and MongoDB on New York City's taxi dataset. 
+<img src="images/sample_knn.png">
 
 # About Project
 In this project, it is aimed to apply k-NN query in two different databases, PostgreSQL and MongoDB. A Python class is created to facilitate the performance analysis between the database management systems. New York taxi data set is used. It is available data set <b> <a href=https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page> New York taxi data</a></b>. The accuracy of the results compared with Haversine and Vincenty formulas. These formulas are used for distance calculation between two points on earth. <br/>
