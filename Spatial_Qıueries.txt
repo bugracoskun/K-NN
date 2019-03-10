@@ -1,0 +1,31 @@
+Basic spatial queries which used in MongoDB and Postgres
+
+--MongoDB Query
+
+db.nyc_singleDay_23may.find( {
+geometry_pk: {
+$nearSphere: {
+$geometry: {
+type: "Point",
+coordinates: [point_lon, point_lat] } } } }
+).limit(k)
+
+
+db.nyc2015.find( {
+geometry_pk: {
+$nearSphere: {
+$geometry: {
+type: "Point",
+coordinates: [point_lon, point_lat] } } } }
+).limit(k)
+
+
+--Postgres Query
+
+select id
+from trips
+order by l_pickup <->
+(select l_pickup
+from trips
+where id = point_ID)
+limit k
