@@ -37,12 +37,12 @@ vincenty_mdb_big = [
 96.21874173936381,86.8073351185444,41.88007557966988,47.53624062525088,50.25926150650632,64.92478483638592,106.59394469388334,268.7657316413805,49.691169138703046,74.65455542496825,52.28674988708023,79.50871771792426,35.536148954171104,46.17582084873649,85.83503708682876,64.09144513755832,67.80674397452871,43.59068686328631,50.41378450997222,78.95922037664782,55.02107688196123,66.77424158750158,35.40389711483454,35.830946635666955,110.35190246750223,58.64422014769747,185.14132686485186,65.36525203013932,54.33520528822253,62.07026428657212
 ];
 
-c = linspace(1,1, length(vincenty_mdb_big(1,:)));
+c = linspace(1,1, length(vincenty_mdb_single(1,:)));
 
 tickSize = 30;
 
-x = transpose(vincenty_pg2_big);
-y = transpose(vincenty_mdb_big);
+x = transpose(vincenty_pg2_single);
+y = transpose(vincenty_mdb_single);
 
 x2 = x(:);
 y2 = y(:);
@@ -80,7 +80,7 @@ hold on
 
 labelSize=30;
 
-yx_max = max(max(max(vincenty_pg2_big)), max(max(vincenty_mdb_big)));
+yx_max = max(max(max(vincenty_pg2_single)), max(max(vincenty_mdb_single)));
 
 xler = linspace(0,yx_max,20);
 
@@ -103,9 +103,10 @@ h(5) = plot(2,2,'.','MarkerSize',55, 'Color', RGB(121,:),  'visible', 'off');
 h(6) = plot(2,2,'.','MarkerSize',55, 'Color', RGB(151,:),  'visible', 'off');
 % Adjustment of line thickness in the legend
 % https://www.mathworks.com/matlabcentral/answers/328791-how-do-i-change-the-linewidth-and-the-fontsize-in-a-legend
-[hleg, hobj, hout, mout] = legend(h,{'\it{k}=1','\it{k}=10','\it{k}=100','\it{k}=1k','\it{k}=10k','\it{k}=100k'},'Fontsize',35,'Location','Northeast');
+[hleg, hobj, hout, mout] = legend(h,{'\it{k}=1','\it{k}=5','\it{k}=10','\it{k}=20','\it{k}=50','\it{k}=100'},'Fontsize',35,'Location','Northeast');
 set(hleg,'FontSize',40);
 
+rectangle('Position',[0 0 30 30],'LineStyle','--','LineWidth',3.5)
 
 
 % [~, hobj, ~, ~] = legend({'ONE','TWO'},'Fontsize',12,'Location','Northeast');
