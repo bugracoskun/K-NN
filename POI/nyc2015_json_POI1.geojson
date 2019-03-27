@@ -1,0 +1,31 @@
+
+                {
+                "type" : "Feature",
+                    "geometry_pk" : {
+                        "type" : "Point",
+                        "coordinates" : [-73.9873352050781,40.7522583007813]},
+                    "properties": {
+                        "ID_Postgres": 64624951,
+                        "VendorID" : 2,
+                        "passenger_count" : 1,
+                        "store_and_fwd_flag" : "N",
+                        "RatecodeID" : 1 ,
+                        "trip_distance" : 2.56,
+                        "payment_type" : 2,
+                        "fare_amount" : 10.0,
+                        "extra" : 0.5,
+                        "mta_tax" : 0.5,
+                        "tip_amount" : 0.0,
+                        "tolls_amount" : 0.0,
+                        "improvement_surcharge" : 0.3,
+                        "total_amount" : 11.3,
+                        "tpep_pickup_datetime" : ISODate("2015-05-23T22:46:01Z"),
+                        "tpep_dropoff_datetime" : ISODate("2015-05-23T22:56:05Z")},
+                    "geometry_do" : {
+                        "type" : "Point",
+                        "coordinates" : [-74.0041656494141,40.7218742370605]},
+                },
+
+                
+                
+                

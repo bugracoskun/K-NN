@@ -172,7 +172,7 @@ class postgres():
         del rows
         cur.close()
 
-    def Specific_id2GeoJSON(self, *kwargs):
+    def Specifid_ID2GeoJSON(self, *kwargs):
         # chunkSize: number of records to be converted to GeoJSON to ease the RAM operations
         # chunkID: the GeoJSON file is going to be saved by using this ID. starts from ZERO
         chunkID = len(kwargs)
@@ -419,3 +419,13 @@ def generateSQL2SelectIDs(IDs):
                   {}""").format(whereClause)
 
     return strSQL
+
+def rearrangeTimeFormat(t):
+    # print(t)
+    date = datetime.datetime.strptime(t, "%Y-%m-%d %H:%M:%S")
+    # print(str(date.isoformat()))
+    # Adding the 'Z' at the end:
+    s = str(date.isoformat())
+    s = ''.join((s, 'Z'))
+    # print(s)
+    return s
