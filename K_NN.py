@@ -173,8 +173,8 @@ class postgres():
         cur.close()
 
     def Specifid_ID2GeoJSON(self, *kwargs):
-        # chunkSize: number of records to be converted to GeoJSON to ease the RAM operations
-        # chunkID: the GeoJSON file is going to be saved by using this ID. starts from ZERO
+        # Input specific ID's of points
+        # It returns geojson file which writen points
         chunkID = len(kwargs)
         for num in kwargs:
             template = \
