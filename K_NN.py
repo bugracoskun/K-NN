@@ -348,7 +348,7 @@ class postgres():
         rows = cur.fetchall()
         cur.close()
         return rows
-
+    #Take position of neighbor
     def neighbor_pos(self,id):
         cur = self.conn.cursor()
         query = "SELECT l_pickup_lat,l_pickup_lon " \

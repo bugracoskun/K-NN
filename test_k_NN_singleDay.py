@@ -1,4 +1,4 @@
-from ST_Queries import *
+from K_NN import *
 from Distance import *
 
 # numRandomPoints: In order to understand the variation of execution times, we are going to randomly select this much of random trips
@@ -20,7 +20,6 @@ def test_k_NN_singleDay(day, numRandomPoints, kValues, connPostgres, connMongoDB
     print(nid_interval)
 
     random_id = random.sample(range(nid_interval[0][0], nid_interval[0][1]), numRandomPoints)
-    #random_id=[356650]
     print(random_id)
 
     # Store the random IDs in a file
@@ -34,23 +33,20 @@ def test_k_NN_singleDay(day, numRandomPoints, kValues, connPostgres, connMongoDB
     rt_mdb = open(fileNames[3], "w")
 
     # Create the files recording the matching percentages
-
     mp_p_v1_v2 = open(fileNames[4], "w")
     mp_p_v1_m = open(fileNames[5], "w")
     mp_p_v2_m = open(fileNames[6], "w")
 
-    # Haversine and Vincenty
-
+    # Create the files recording the Haversine and Vincenty Mean distances
     haversine_mean_pv1 = open(fileNames[7], "w")
     vincenty_mean_pv1 = open(fileNames[8], "w")
     haversine_mean_pv2 = open(fileNames[9], "w")
     vincenty_mean_pv2 = open(fileNames[10], "w")
     haversine_mean_mdb = open(fileNames[11], "w")
     vincenty_mean_mdb = open(fileNames[12], "w")
-
+    # Create the files recording the Haversine and Vincenty Max distances
     vincenty_max_pv2=open(fileNames[13], "w")
     vincenty_max_mdb = open(fileNames[14], "w")
-
 
     print("K Values: ", kValues)
     for k in kValues:
@@ -74,20 +70,15 @@ def test_k_NN_singleDay(day, numRandomPoints, kValues, connPostgres, connMongoDB
 
             print("Point ID: ", str(random_id[i]))
 
+            #Time Differences
             timediff_mongo, my_set_mdb = M.k_NN_day(random_id[i], k)
             print("Neighbours - Mongo: ", my_set_mdb)
-
-
             timediff_pg_v1, my_set_pg_v1 = P.k_NN_v1(random_id[i], k, 'nid', tableName)
             print("Neighbours - v1: ", my_set_pg_v1)
             timediff_pg_v2, my_set_pg_v2 = P.k_NN_v2(random_id[i], k, 'nid', tableName)
             print("Neighbours - v2: ", my_set_pg_v2)
 
-
-            # print("MDB:",my_set_mdb)
-            # print("PG:",my_set_pg)
-            # print("PG2", my_set_pg_multiply2table)
-
+            #Matching Percentage
             inters = my_set_mdb & my_set_pg_v1
             pers = (len(inters) / k) * 100
             mp_p_v1_m.write(str(pers)[0:5])
@@ -97,7 +88,6 @@ def test_k_NN_singleDay(day, numRandomPoints, kValues, connPostgres, connMongoDB
             pers_postgres = (len(inters_postgres) / k) * 100
             mp_p_v1_v2.write(str(pers_postgres)[0:5])
             mp_p_v1_v2.write(" ")
-
 
             inters_mdbvpg2 = my_set_mdb & my_set_pg_v2
             pers_mdbvpg2 = (len(inters_mdbvpg2) / k) * 100
@@ -113,14 +103,16 @@ def test_k_NN_singleDay(day, numRandomPoints, kValues, connPostgres, connMongoDB
             rt_pg.write('%s ' % timediff_pg_v1)
             rt_pg2.write('%s ' % timediff_pg_v2)
 
-            ##########################
-            start_point = P.pickup_pos(str(random_id[i]))
+            #Haversine and Vincenty
 
+            # Pickup position
+            start_point = P.pickup_pos(str(random_id[i]))
             for j in range(k):
+                # Take position of the neigbors
                 p_v1 = P.neighbor_pos(str(list(my_set_pg_v1)[j]))
                 p_v2 = P.neighbor_pos(str(list(my_set_pg_v2)[j]))
                 mdb = P.neighbor_pos(str(list(my_set_mdb)[j]))
-
+                # Call Distance class (lat1,lon1,lat2,lon2)
                 dist_pv1 = distance(start_point[0][0], start_point[0][1], p_v1[0][0], p_v1[0][1])
                 result_pv1 = dist_pv1.Haversine()
                 result_v_pv1 = dist_pv1.Vincenty()
@@ -132,7 +124,7 @@ def test_k_NN_singleDay(day, numRandomPoints, kValues, connPostgres, connMongoDB
                 dist_mdb = distance(start_point[0][0], start_point[0][1], mdb[0][0], mdb[0][1])
                 result_mdb = dist_mdb.Haversine()
                 result_v_mdb = dist_mdb.Vincenty()
-
+                # Find Max
                 if max_pv2<result_v_pv2:
                     max_pv2=result_v_pv2
                 if max_mdb<result_v_mdb:

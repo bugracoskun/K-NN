@@ -1,4 +1,4 @@
-from ST_Queries import *
+from K_NN import *
 from Distance import *
 
 def KnnBigData(tableName,numRandomPoints, kValues, connPostgres, connMongoDB, fileNames):
@@ -9,7 +9,6 @@ def KnnBigData(tableName,numRandomPoints, kValues, connPostgres, connMongoDB, fi
     print (id_interval)
 
     random_id = random.sample(range(id_interval[0][0], id_interval[0][1]), numRandomPoints)
-    #random_id=[43100134, 133860523, 118635371, 101188756, 56995123, 45645858, 129603930, 14449344, 76005736, 98610558, 15478286, 142839500, 34867085, 120665070, 135164291, 62165957, 2747424, 14105623, 88008153, 120292710]
     print(random_id)
 
     # Store the random IDs in a file
@@ -18,27 +17,25 @@ def KnnBigData(tableName,numRandomPoints, kValues, connPostgres, connMongoDB, fi
     file_randomIDs.close()
 
     # Create the files recording the runtimes
-    rt_pg = open(fileNames[1], "a")
-    rt_pg2 = open(fileNames[2], "a")
-    rt_mdb = open(fileNames[3], "a")
+    rt_pg = open(fileNames[1], "w")
+    rt_pg2 = open(fileNames[2], "w")
+    rt_mdb = open(fileNames[3], "w")
 
     # Create the files recording the matching percentages
+    mp_p_v1_v2 = open(fileNames[4], "w")
+    mp_p_v1_m = open(fileNames[5], "w")
+    mp_p_v2_m = open(fileNames[6], "w")
 
-    mp_p_v1_v2 = open(fileNames[4], "a")
-    mp_p_v1_m = open(fileNames[5], "a")
-    mp_p_v2_m = open(fileNames[6], "a")
-
-    # Haversine and Vincenty
-
+    # Create the files recording the Haversine and Vincenty mean distances
     haversine_mean_pv1 = open(fileNames[7], "w")
     vincenty_mean_pv1 = open(fileNames[8], "w")
-    haversine_mean_pv2 = open(fileNames[9], "a")
-    vincenty_mean_pv2 = open(fileNames[10], "a")
-    haversine_mean_mdb = open(fileNames[11], "a")
-    vincenty_mean_mdb = open(fileNames[12], "a")
-
-    vincenty_max_pv2 = open(fileNames[13], "a")
-    vincenty_max_mdb = open(fileNames[14], "a")
+    haversine_mean_pv2 = open(fileNames[9], "w")
+    vincenty_mean_pv2 = open(fileNames[10], "w")
+    haversine_mean_mdb = open(fileNames[11], "w")
+    vincenty_mean_mdb = open(fileNames[12], "w")
+    # Create the files recording the Haversine and Vincenty Max distances
+    vincenty_max_pv2 = open(fileNames[13], "w")
+    vincenty_max_mdb = open(fileNames[14], "w")
 
     print("K Values: ", kValues)
     for k in kValues:
@@ -62,19 +59,15 @@ def KnnBigData(tableName,numRandomPoints, kValues, connPostgres, connMongoDB, fi
             max_mdb = 0
 
             print("Point ID: ", str(random_id[i]))
-
+            # Time Differences
             timediff_mongo, my_set_mdb = M.k_NN(random_id[i], k)
             print("Neighbours - Mongo: ", my_set_mdb)
-
             timediff_pg_v1, my_set_pg_v1 = P.k_NN_v1(random_id[i], k, 'id', tableName)
             print("Neighbours - v1: ", my_set_pg_v1)
             timediff_pg_v2, my_set_pg_v2 = P.k_NN_v2(random_id[i], k, 'id', tableName)
             print("Neighbours - v2: ", my_set_pg_v2)
 
-            print(i)
-            print("PG:",my_set_pg)
-            print("PG2", my_set_pg_multiply2table)
-
+            # Matching percentage
             inters = my_set_mdb & my_set_pg_v1
             pers = (len(inters) / k) * 100
             mp_p_v1_m.write(str(pers)[0:5])
@@ -98,14 +91,17 @@ def KnnBigData(tableName,numRandomPoints, kValues, connPostgres, connMongoDB, fi
             rt_pg.write('%s ' % timediff_pg_v1)
             rt_pg2.write('%s ' % timediff_pg_v2)
 
-            ##########################
+            # Haversine and Vincenty
+
+            # pickup position
             start_point = P.pickup_pos_big(str(random_id[i]))
 
             for j in range(k):
+                # Take position of the neigbors
                 p_v1 = P.neighbor_pos_big(str(list(my_set_pg_v1)[j]))
                 p_v2 = P.neighbor_pos_big(str(list(my_set_pg_v2)[j]))
                 mdb = P.neighbor_pos_big(str(list(my_set_mdb)[j]))
-
+                # Call Distance class (lat1,lon1,lat2,lon2)
                 dist_pv1 = distance(start_point[0][0], start_point[0][1], p_v1[0][0], p_v1[0][1])
                 result_pv1 = dist_pv1.Haversine()
                 result_v_pv1 = dist_pv1.Vincenty()
@@ -117,7 +113,7 @@ def KnnBigData(tableName,numRandomPoints, kValues, connPostgres, connMongoDB, fi
                 dist_mdb = distance(start_point[0][0], start_point[0][1], mdb[0][0], mdb[0][1])
                 result_mdb = dist_mdb.Haversine()
                 result_v_mdb = dist_mdb.Vincenty()
-
+                # Find Max
                 if max_pv2<result_v_pv2:
                     max_pv2=result_v_pv2
                 if max_mdb<result_v_mdb:
